@@ -49,7 +49,7 @@ jobs:
         mkdir -p $BUILD_DIR
         emcc --no-entry -pthread -sMODULARIZE=1 -sEXPORT_NAME=lib $CFLAGS -o $BUILD_DIR/lib.js ./src/lib.c
       env:
-        CFLAGS: -sSTRICT=${{ matrix.strict }} -sINCOMING_MODULE_JS_API=['wasmMemory']
+        CFLAGS: -sSTRICT=${{ matrix.strict }} -sINCOMING_MODULE_JS_API=['wasmMemory','buffer','instantiateWasm']
 
     - name: List
       run: |
