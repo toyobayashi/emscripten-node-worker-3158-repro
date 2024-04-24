@@ -1,0 +1,51 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+
+env:
+  BUILD_DIR: 'out'
+  EM_CACHE_FOLDER: 'emsdk-cache'
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        emversion:
+        - '3.1.57'
+        - '3.1.58'
+        strict:
+        - '0'
+        - '1'
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: mymindstorm/setup-emsdk@v14
+      with:
+        version: ${{ matrix.emversion }}
+        actions-cache-folder: ${{ env.EM_CACHE_FOLDER }}
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Build
+      shell: bash
+      run: |
+        mkdir -p $BUILD_DIR
+        emcc --no-entry -pthread -sMODULARIZE=1 -sEXPORT_NAME=lib $CFLAGS -o $BUILD_DIR/lib.js ./src/lib.c
+      env:
+        CFLAGS: -sSTRICT=${{ matrix.strict }}
+
+    - name: List
+      run: |
+        ls -al .
+        ls -al $BUILD_DIR
+
+    - name: Test
+      run: node ./index.js
+      timeout-minutes: 1

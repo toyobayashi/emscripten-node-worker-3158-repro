@@ -1,0 +1,21 @@
+{
+  "configurations": [
+    {
+      "name": "Emscripten",
+      "compilerPath": "${env:EMSDK}/upstream/emscripten/emcc",
+      "intelliSenseMode": "linux-clang-x86",
+      "cStandard": "c11",
+      "cppStandard": "c++17",
+      "compilerArgs": ["-pthread"]
+    },
+    {
+      "name": "Win32 Emscripten",
+      "compilerPath": "${env:EMSDK}\\upstream\\emscripten\\emcc.bat",
+      "intelliSenseMode": "linux-clang-x86",
+      "cStandard": "c11",
+      "cppStandard": "c++17",
+      "compilerArgs": ["-pthread"]
+    }
+  ],
+  "version": 4
+}
