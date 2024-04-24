@@ -35,11 +35,21 @@ jobs:
 
     - name: Build
       shell: bash
+      if: ${{ matrix.strict == '0' }}
       run: |
         mkdir -p $BUILD_DIR
         emcc --no-entry -pthread -sMODULARIZE=1 -sEXPORT_NAME=lib $CFLAGS -o $BUILD_DIR/lib.js ./src/lib.c
       env:
-        CFLAGS: -sSTRICT=${{ matrix.strict }}
+        CFLAGS:
+    
+    - name: Build (Strict)
+      shell: bash
+      if: ${{ matrix.strict != '0' }}
+      run: |
+        mkdir -p $BUILD_DIR
+        emcc --no-entry -pthread -sMODULARIZE=1 -sEXPORT_NAME=lib $CFLAGS -o $BUILD_DIR/lib.js ./src/lib.c
+      env:
+        CFLAGS: -sSTRICT=${{ matrix.strict }} -sINCOMING_MODULE_JS_API=['wasmMemory']
 
     - name: List
       run: |
